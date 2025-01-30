@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import "./calendar.css";
 
 const QuickSelectOptions = [
@@ -26,7 +26,7 @@ const generateCalendar = (month: any) => {
 
 export const Calendarly = ({ isRange = false }) => {
   const [selectedDate, setSelectedDate] = useState(null);
-  const [dateRange, setDateRange] = useState([null, null]);
+  const [dateRange, setDateRange] = useState<[null | Dayjs, null | Dayjs ]>([null, null]);
   const [open, setOpen] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(dayjs());
 
