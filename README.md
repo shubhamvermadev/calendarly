@@ -68,7 +68,7 @@ import { Calendarly } from "@svpkg/calendarly";
 />
 ```
 
-![single calendar](./public/single.png)
+![single calendar](https://github.com/shubhamvermadev/public_images/blob/master/packages/calendarly/single.png?raw=true)
 
 ### 📆 Date-Range Picker  
 
@@ -80,7 +80,7 @@ import { Calendarly } from "@svpkg/calendarly";
     onSelect={(range) => console.log("Selected Range:", range)}
 />
 ```
-![Multiple calendar](./public/multiple.png)
+![Multiple calendar](https://github.com/shubhamvermadev/public_images/blob/master/packages/calendarly/multiple.png?raw=true)
 ---
 <!-- 
 ## 🎨 Customization  
