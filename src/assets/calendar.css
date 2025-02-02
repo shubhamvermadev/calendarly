@@ -16,7 +16,6 @@
     position: absolute;
     top: 100%;
     left: 0;
-    width: 330px;
     background: white;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -74,7 +73,7 @@
     width: 70%;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
+    row-gap: 2px;
   }
   
   .calendar-day-label {
@@ -108,3 +107,22 @@
     border-radius: 4px;
   }
   
+
+
+
+  .flex {
+    display: flex;
+  }
+
+  .start {
+    background: #007bff;
+    border-radius: 10px 0 0 10px;
+  }
+
+  .end {
+    background: #007bff;
+    border-radius: 0 10px 10px 0;
+  }
+  .in-between  {
+    background: #007bff;
+  }

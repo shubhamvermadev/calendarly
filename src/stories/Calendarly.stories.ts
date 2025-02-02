@@ -1,14 +1,19 @@
-import Test from "./Calendarly";
-import { Meta } from "@storybook/react";
+import Calendar from "./Calendarly";
+import Calendarly from "./Calendarly";
+import { Meta, StoryObj } from "@storybook/react";
 
-const meta: Meta<typeof Test> = {
-  component: Test,
-  title: "Editor",
+const meta: Meta<typeof Calendarly> = {
+  component: Calendarly,
+  title: "Calendarly",
 };
 export default meta;
 
-export const Default = {
+type Story = StoryObj<typeof Calendarly>;
+
+export const Default: Story = {
   args: {
-    value: "",
+    isRange:  true,
+    type: "single",
+    quickSelection: false,
   },
 };

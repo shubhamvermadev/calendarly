@@ -1,6 +1,6 @@
 {
   "name": "@svpkg/calendarly",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A sleek, dependency-free React calendar with Tailwind styling, date range selection, and quick presets. 🚀📅",
   "author": "Shubham Verma <shubhamverma1024@gmail.com>",
   "license": "MIT",

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import "./calendar.css";
+import "./assets/calendar.css";
+import { cn } from "./stories/utility";
 
 const QuickSelectOptions = [
   { label: "Today", range: [dayjs(), dayjs()] },
@@ -24,11 +25,15 @@ const generateCalendar = (month: any) => {
   return days;
 };
 
-export const Calendarly = ({ isRange = false }) => {
+const renderIf = (condition: boolean) => (component: JSX.Element) => condition ? component : null;
+
+export const Calendarly = ({ isRange = false, type, onSelect, quickSelection = false }) => {
   const [selectedDate, setSelectedDate] = useState(null);
-  const [dateRange, setDateRange] = useState<[null | Dayjs, null | Dayjs ]>([null, null]);
+  const [dateRange, setDateRange] = useState<[null | Dayjs, null | Dayjs]>([null, null]);
   const [open, setOpen] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(dayjs());
+
+
 
   const handleSelectQuickOption = (range: any) => {
     setDateRange(range);
@@ -36,17 +41,23 @@ export const Calendarly = ({ isRange = false }) => {
     setOpen(false);
   };
 
-  const handleDateClick = (date: any) => {
+  const handleDateClick = (date: Dayjs) => {
     if (isRange) {
       if (!dateRange[0]) setDateRange([date, null]);
-      else if (!dateRange[1]) setDateRange([dateRange[0], date]);
+      else if (!dateRange[1]) {
+        setDateRange([dateRange[0], date])
+        onSelect([dateRange[0].toDate(), date.toDate()])
+      }
       else setDateRange([date, null]);
     } else {
       setSelectedDate(date);
+      onSelect(date)
       setOpen(false);
     }
   };
 
+  const isMultiple = renderIf(type === "multiple");
+  const showQuickSelection = renderIf(quickSelection);
   return (
     <div className="calendar-container">
       <input
@@ -67,12 +78,13 @@ export const Calendarly = ({ isRange = false }) => {
               ◀
             </button>
             <span className="calendar-title">{currentMonth.format("MMMM YYYY")}</span>
+            {isMultiple(<span className="calendar-title">{currentMonth.add(1, "month").format("MMMM YYYY")}</span>)}
             <button className="nav-button" onClick={() => setCurrentMonth(currentMonth.add(1, "month"))}>
               ▶
             </button>
           </div>
           <div className="calendar-body">
-            <div className="quick-select">
+            {showQuickSelection(<div className="quick-select">
               {QuickSelectOptions.map((option) => (
                 <button
                   key={option.label}
@@ -82,24 +94,47 @@ export const Calendarly = ({ isRange = false }) => {
                   {option.label}
                 </button>
               ))}
-            </div>
-            <div className="calendar-grid">
-              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                <div key={day} className="calendar-day-label">{day}</div>
-              ))}
-              {generateCalendar(currentMonth).map((date, index) => (
-                <button
-                  key={index}
-                  className={`calendar-day ${
-                    date && selectedDate?.isSame(date, "day") ? "selected" : ""
-                  } ${
-                    date && (dateRange[0]?.isSame(date, "day") || dateRange[1]?.isSame(date, "day")) ? "range-selected" : ""
-                  }`}
-                  onClick={() => date && handleDateClick(date)}
-                >
-                  {date ? date.date() : ""}
-                </button>
-              ))}
+            </div>)}
+            <div className="flex">
+              <div className="calendar-grid">
+                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+                  <div key={day} className="calendar-day-label">{day}</div>
+                ))}
+                {generateCalendar(currentMonth).map((date, index) => (
+                  <button
+                    key={index}
+                    className={cn("calendar-day", {
+                      "selected": date && selectedDate?.isSame(date, "day"),
+                      "start": date && dateRange[0]?.isSame(date, "day"),
+                      "end": date && dateRange[1]?.isSame(date, "day"),
+                      "in-between": dateRange[0]?.isBefore(date, "day") && dateRange[1]?.isAfter(date, "day")
+                    })}
+                    onClick={() => date && handleDateClick(date)}
+                  >
+                    {date ? date.date() : ""}
+                  </button>
+                ))}
+              </div>
+              {isMultiple(<div className={"separator"}> - </div>)}
+              {isMultiple(<div className="calendar-grid">
+                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+                  <div key={day} className="calendar-day-label">{day}</div>
+                ))}
+                {generateCalendar(currentMonth.add(1, "month")).map((date, index) => (
+                  <button
+                    key={index}
+                    className={cn("calendar-day", {
+                      "selected": date && selectedDate?.isSame(date, "day"),
+                      "start": date && dateRange[0]?.isSame(date, "day"),
+                      "end": date && dateRange[1]?.isSame(date, "day"),
+                      "in-between": dateRange[0]?.isBefore(date, "day") && dateRange[1]?.isAfter(date, "day")
+                    })}
+                    onClick={() => date && handleDateClick(date)}
+                  >
+                    {date ? date.date() : ""}
+                  </button>
+                ))}
+              </div>)}
             </div>
           </div>
         </div>
